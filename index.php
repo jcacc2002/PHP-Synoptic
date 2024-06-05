@@ -31,8 +31,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input type="password" class="form-control" id="password" name="password" required>
         </div>
         <button type="submit" class="btn btn-primary">Sign In</button>
-        <button type="button" class="btn btn-secondary" onclick="window.location.href='create_account_3.php'">Create New Account</button>
+        <button type="button" class="btn btn-secondary" onclick="window.location.href='create_account.php'">Create New Account</button>
     </form>
 </div>
-
-<?php include('includes/footer.php'); ?>
