@@ -11,6 +11,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $query = "INSERT INTO users (email, username, password, first_name, last_name, birthdate) VALUES ('$email', '$username', '$password', '$first_name', '$last_name', '$birthdate')";
     if (mysqli_query($conn, $query)) {
+        session_start();
+        $_SESSION['username'] = $username; // Store the username in the session
         header("Location: ../interests.php");
     } else {
         echo "Error: " . $query . "<br>" . mysqli_error($conn);
