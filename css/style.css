@@ -1,0 +1,15 @@
+body {
+    padding-top: 56px;
+}
+
+.navbar-nav .nav-link {
+    color: #555;
+}
+
+.navbar-brand {
+    font-weight: bold;
+}
+
+.container {
+    margin-top: 20px;
+}
