@@ -185,7 +185,12 @@ $(document).on('click', '.like-btn', function() {
             response = JSON.parse(response);
             if (response.success) {
                 $('#like-count-' + postId).text(response.like_count);
+            } else {
+                console.log(response.message);
             }
+        },
+        error: function(xhr, status, error) {
+            console.log('Error: ' + error);
         }
     });
 });
