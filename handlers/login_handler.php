@@ -3,24 +3,25 @@ session_start();
 include('../config.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    $username = mysqli_real_escape_string($conn, $_POST['username']);
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
 
-    // Escape special characters for SQL
-    $username = mysqli_real_escape_string($conn, $username);
-    $password = mysqli_real_escape_string($conn, $password);
-
-    // Query to check if the user exists with the given username and password
-    $query = "SELECT * FROM users WHERE username='$username' AND password='$password'";
+    $query = "SELECT user_id, password FROM users WHERE username='$username'";
     $result = mysqli_query($conn, $query);
 
     if (mysqli_num_rows($result) == 1) {
-        // Login successful
-        $_SESSION['username'] = $username;
-        header("Location: ../main_feed.php");
+        $user = mysqli_fetch_assoc($result);
+
+        // Verify the password
+        if (password_verify($password, $user['password'])) {
+            $_SESSION['username'] = $username;
+            header("Location: ../main_feed.php");
+            exit();
+        } else {
+            echo "Invalid password.";
+        }
     } else {
-        // Login failed
-        echo "Invalid username or password";
+        echo "Invalid username.";
     }
 }
 ?>

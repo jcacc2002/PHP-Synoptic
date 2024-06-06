@@ -107,6 +107,10 @@ $friends = mysqli_query($conn, $query);
                     <input type="hidden" name="friend_id" value="<?php echo $friend['friend_id']; ?>">
                     <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to remove this friend?');">Remove</button>
                 </form>
+                <form method="GET" action="message.php" style="display:inline;">
+                    <input type="hidden" name="receiver_id" value="<?php echo $friend['friend_id']; ?>">
+                    <button type="submit" class="btn btn-info btn-sm">Message</button>
+                </form>
             </li>
         <?php endwhile; ?>
     </ul>
