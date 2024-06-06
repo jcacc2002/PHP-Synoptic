@@ -1,7 +1,7 @@
 $(document).ready(function() {
     function loadMessages() {
         $.ajax({
-            url: 'handlers/fetch_messages.php',
+            url: 'handlers/fetch_messages_handler.php',
             type: 'GET',
             data: {
                 friend_id: friendId
@@ -19,7 +19,7 @@ $(document).ready(function() {
     $('#messageForm').submit(function(e) {
         e.preventDefault();
         $.ajax({
-            url: 'handlers/send_message.php',
+            url: 'handlers/send_message_handler.php',
             type: 'POST',
             data: {
                 friend_id: friendId,

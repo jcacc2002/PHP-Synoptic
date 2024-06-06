@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user_id = $user['user_id'];
 
     // Insert the message into the database
-    $query = "INSERT INTO messages (sender_id, receiver_id, content) VALUES ('$user_id', '$friend_id', '$message')";
+    $query = "INSERT INTO messages (sender_id, receiver_id, content, `read`) VALUES ('$user_id', '$friend_id', '$message', FALSE)";
     mysqli_query($conn, $query);
 }
 ?>
