@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['content'])) {
 
 // Fetch posts from the user and their friends
 $query = "
-    SELECT p.content, p.created_at, u.username 
+    SELECT p.post_id, p.content, p.created_at, u.username, p.user_id 
     FROM posts p 
     JOIN users u ON p.user_id = u.user_id 
     WHERE p.user_id = '$user_id' 
@@ -52,6 +52,12 @@ $posts = mysqli_query($conn, $query);
                 <h5 class="card-title"><?php echo htmlspecialchars($post['username']); ?></h5>
                 <p class="card-text"><?php echo htmlspecialchars($post['content']); ?></p>
                 <p class="card-text"><small class="text-muted"><?php echo $post['created_at']; ?></small></p>
+                <?php if ($post['user_id'] == $user_id): ?>
+                    <form method="POST" action="handlers/delete_post_handler.php" onsubmit="return confirm('Are you sure you want to delete this post?');">
+                        <input type="hidden" name="post_id" value="<?php echo $post['post_id']; ?>">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                <?php endif; ?>
             </div>
         </div>
     <?php endwhile; ?>
