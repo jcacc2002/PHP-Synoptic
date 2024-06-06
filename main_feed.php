@@ -15,9 +15,25 @@ $user = mysqli_fetch_assoc($result);
 $user_id = $user['user_id'];
 
 // Handle post form submission
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['content'])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['content']) && !isset($_POST['comment_content'])) {
     $content = mysqli_real_escape_string($conn, $_POST['content']);
     $query = "INSERT INTO posts (user_id, content) VALUES ('$user_id', '$content')";
+    mysqli_query($conn, $query);
+}
+
+// Handle comment form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['comment_content']) && isset($_POST['post_id'])) {
+    $comment_content = mysqli_real_escape_string($conn, $_POST['comment_content']);
+    $post_id = $_POST['post_id'];
+    $parent_comment_id = isset($_POST['parent_comment_id']) ? $_POST['parent_comment_id'] : 'NULL';
+
+    // Handle parent_comment_id properly
+    if ($parent_comment_id === 'NULL') {
+        $query = "INSERT INTO comments (post_id, user_id, parent_comment_id, content) VALUES ('$post_id', '$user_id', NULL, '$comment_content')";
+    } else {
+        $query = "INSERT INTO comments (post_id, user_id, parent_comment_id, content) VALUES ('$post_id', '$user_id', '$parent_comment_id', '$comment_content')";
+    }
+
     mysqli_query($conn, $query);
 }
 
@@ -31,6 +47,38 @@ $query = "
     ORDER BY p.created_at DESC
 ";
 $posts = mysqli_query($conn, $query);
+
+// Fetch comments for a specific post
+function fetch_comments($post_id, $conn) {
+    $query = "SELECT c.comment_id, c.content, c.created_at, u.username, c.user_id, c.parent_comment_id 
+                FROM comments c 
+                JOIN users u ON c.user_id = u.user_id 
+                WHERE c.post_id = '$post_id' 
+                ORDER BY c.created_at ASC";
+    return mysqli_query($conn, $query);
+}
+
+function display_comments($comments, $post_id, $parent_id = NULL) {
+    $html = '';
+    foreach ($comments as $comment) {
+        if ($comment['parent_comment_id'] == $parent_id) {
+            $html .= '<div class="comment" style="margin-left: ' . ($parent_id ? '40px' : '0') . ';">';
+            $html .= '<p><strong>' . htmlspecialchars($comment['username']) . ':</strong> ' . htmlspecialchars($comment['content']) . '</p>';
+            $html .= '<p><small class="text-muted">' . $comment['created_at'] . '</small></p>';
+            $html .= '<form method="POST" action="main_feed.php" style="margin-bottom: 10px;">
+                        <input type="hidden" name="post_id" value="' . $post_id . '">
+                        <input type="hidden" name="parent_comment_id" value="' . $comment['comment_id'] . '">
+                        <div class="form-group">
+                            <textarea class="form-control" name="comment_content" placeholder="Reply to this comment..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-sm">Reply</button>
+                        </form>';
+            $html .= display_comments($comments, $post_id, $comment['comment_id']);
+            $html .= '</div>';
+        }
+    }
+    return $html;
+}
 ?>
 
 <div class="container">
@@ -54,11 +102,26 @@ $posts = mysqli_query($conn, $query);
                 <p class="card-text"><small class="text-muted"><?php echo $post['created_at']; ?></small></p>
                 <?php if ($post['user_id'] == $user_id): ?>
                     <button class="btn btn-warning" onclick="editPost('<?php echo $post['post_id']; ?>', '<?php echo htmlspecialchars($post['content']); ?>')">Edit</button>
-                    <form method="POST" action="handlers/delete_post.php" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this post?');">
+                    <form method="POST" action="handlers/delete_post_handler.php" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this post?');">
                         <input type="hidden" name="post_id" value="<?php echo $post['post_id']; ?>">
                         <button type="submit" class="btn btn-danger">Delete</button>
                     </form>
                 <?php endif; ?>
+                
+                <!-- Comment Form -->
+                <form method="POST" action="main_feed.php" style="margin-top: 10px;">
+                    <input type="hidden" name="post_id" value="<?php echo $post['post_id']; ?>">
+                    <div class="form-group">
+                        <textarea class="form-control" name="comment_content" placeholder="Write a comment..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-sm">Comment</button>
+                </form>
+
+                <!-- Display Comments -->
+                <?php 
+                $comments = fetch_comments($post['post_id'], $conn); 
+                echo display_comments(mysqli_fetch_all($comments, MYSQLI_ASSOC), $post['post_id']);
+                ?>
             </div>
         </div>
     <?php endwhile; ?>
