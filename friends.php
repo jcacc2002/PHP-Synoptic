@@ -38,7 +38,7 @@ $query = "SELECT fr.request_id, u.username FROM friend_requests fr JOIN users u 
 $friend_requests = mysqli_query($conn, $query);
 
 // Fetch friends
-$query = "SELECT u.username FROM friends f JOIN users u ON f.friend_id = u.user_id WHERE f.user_id='$user_id'";
+$query = "SELECT u.user_id, u.username FROM friends f JOIN users u ON f.friend_id = u.user_id WHERE f.user_id='$user_id'";
 $friends = mysqli_query($conn, $query);
 ?>
 
@@ -68,7 +68,11 @@ $friends = mysqli_query($conn, $query);
     <h2>Friends List</h2>
     <ul>
         <?php while ($friend = mysqli_fetch_assoc($friends)): ?>
-            <li><?php echo $friend['username']; ?></li>
+            <li>
+                <?php echo $friend['username']; ?>
+                <a href="handlers/remove_friend_handler.php?friend_id=<?php echo $friend['user_id']; ?>" class="btn btn-danger btn-sm">Remove Friend</a>
+                <a href="message.php?friend_id=<?php echo $friend['user_id']; ?>" class="btn btn-primary btn-sm">Message</a>
+            </li>
         <?php endwhile; ?>
     </ul>
 </div>
