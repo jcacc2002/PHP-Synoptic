@@ -1,15 +1,115 @@
+/* General Styles */
 body {
+    background-color: #2e2e2e; 
+    color: #ffffff; 
     padding-top: 56px;
 }
 
-.navbar-nav .nav-link {
-    color: #555;
+.navbar {
+    background-color: #3e3e3e; 
 }
 
 .navbar-brand {
     font-weight: bold;
+    color: #ffffff !important; 
+}
+
+.nav-link {
+    color: #ffffff !important; 
 }
 
 .container {
     margin-top: 20px;
+}
+
+/* Post Creation Form */
+form {
+    margin-bottom: 20px;
+}
+
+.form-control {
+    background-color: #4e4e4e; 
+    color: #ffffff; 
+    border: 1px solid #5e5e5e; 
+}
+
+.form-group label {
+    color: #ffffff; 
+}
+
+/* Card Styles for Posts */
+.card {
+    margin-bottom: 20px;
+    border: 1px solid #5e5e5e; 
+    border-radius: 0.25rem;
+    background-color: #3e3e3e; 
+    color: #ffffff; 
+}
+
+.card-body {
+    padding: 15px;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+    color: #ffffff; 
+}
+
+.card-text {
+    font-size: 1rem;
+    margin-bottom: 10px;
+    color: #d3d3d3; 
+}
+
+.card-text small {
+    color: #a9a9a9; 
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #ff8000; 
+    border-color: #ff8000; 
+}
+
+.btn-primary:hover {
+    background-color: #cc6600; 
+    border-color: #cc6600; 
+}
+
+.btn-danger {
+    background-color: #ff8000; 
+    border-color: #ff8000; 
+}
+
+.btn-danger:hover {
+    background-color: #cc6600; 
+    border-color: #cc6600; 
+}
+
+.btn-success {
+    background-color: #ff8000; 
+    border-color: #ff8000; 
+}
+
+.btn-success:hover {
+    background-color: #cc6600; 
+    border-color: #cc6600; 
+}
+
+/* Specific Sections */
+.messages, .friend-requests, .notifications {
+    margin-top: 20px;
+    background-color: #3e3e3e; 
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+    color: #ffffff; 
+}
+
+.btn {
+    margin-right: 5px;
 }
