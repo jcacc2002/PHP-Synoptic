@@ -49,16 +49,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_friend_username'])
 
 // Fetch friend requests
 $query = "SELECT fr.sender_id, u.username 
-          FROM friend_requests fr 
-          JOIN users u ON fr.sender_id = u.user_id 
-          WHERE fr.receiver_id = '$user_id'";
+            FROM friend_requests fr 
+            JOIN users u ON fr.sender_id = u.user_id 
+            WHERE fr.receiver_id = '$user_id'";
 $friend_requests = mysqli_query($conn, $query);
 
 // Fetch friends and their statuses
 $query = "SELECT f.friend_id, u.username, f.status 
-          FROM friends f 
-          JOIN users u ON f.friend_id = u.user_id 
-          WHERE f.user_id = '$user_id'";
+            FROM friends f 
+            JOIN users u ON f.friend_id = u.user_id 
+            WHERE f.user_id = '$user_id'";
 $friends = mysqli_query($conn, $query);
 ?>
 
