@@ -18,6 +18,7 @@
             <li class="nav-item"><a class="nav-link" href="profile.php">Profile</a></li>
             <li class="nav-item"><a class="nav-link" href="friends.php">Friends</a></li>
             <li class="nav-item"><a class="nav-link" href="messages.php">Messages</a></li>
+            <li class="nav-item"><a class="nav-link" href="groups.php">Groups</a></li>
             <li class="nav-item"><a class="nav-link" href="notifications.php">Notifications</a></li>
             <li class="nav-item"><a class="nav-link" href="handlers/logout_handler.php">Log Out</a></li>
         </ul>
