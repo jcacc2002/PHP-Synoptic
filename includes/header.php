@@ -15,7 +15,6 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
-            <li class="nav-item"><a class="nav-link" href="store.php">Store</a></li>
             <li class="nav-item"><a class="nav-link" href="profile.php">Profile</a></li>
             <li class="nav-item"><a class="nav-link" href="friends.php">Friends</a></li>
             <li class="nav-item"><a class="nav-link" href="messages.php">Messages</a></li>
