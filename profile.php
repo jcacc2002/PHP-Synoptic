@@ -12,16 +12,49 @@ $username = $_SESSION['username'];
 $query = "SELECT * FROM users WHERE username='$username'";
 $result = mysqli_query($conn, $query);
 $user = mysqli_fetch_assoc($result);
+
+// Handle profile update form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_profile'])) {
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $username = mysqli_real_escape_string($conn, $_POST['username']);
+    $first_name = mysqli_real_escape_string($conn, $_POST['first_name']);
+    $last_name = mysqli_real_escape_string($conn, $_POST['last_name']);
+    $birthdate = mysqli_real_escape_string($conn, $_POST['birthdate']);
+
+    $query = "UPDATE users SET email='$email', username='$username', first_name='$first_name', last_name='$last_name', birthdate='$birthdate' WHERE user_id='{$user['user_id']}'";
+    mysqli_query($conn, $query);
+
+    $_SESSION['username'] = $username; // Update session username
+    header("Location: profile.php");
+    exit();
+}
 ?>
 
 <div class="container">
     <h1>Profile</h1>
-    <p><strong>Username:</strong> <?php echo $user['username']; ?></p>
-    <p><strong>Email:</strong> <?php echo $user['email']; ?></p>
-    <p><strong>First Name:</strong> <?php echo $user['first_name']; ?></p>
-    <p><strong>Last Name:</strong> <?php echo $user['last_name']; ?></p>
-    <p><strong>Birthdate:</strong> <?php echo $user['birthdate']; ?></p>
-    <a href="handlers/logout_handler.php" class="btn btn-danger">Log Out</a>
+    <form method="POST" action="profile.php">
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
+        </div>
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" class="form-control" id="username" name="username" value="<?php echo htmlspecialchars($user['username']); ?>" required>
+        </div>
+        <div class="form-group">
+            <label for="first_name">First Name:</label>
+            <input type="text" class="form-control" id="first_name" name="first_name" value="<?php echo htmlspecialchars($user['first_name']); ?>" required>
+        </div>
+        <div class="form-group">
+            <label for="last_name">Last Name:</label>
+            <input type="text" class="form-control" id="last_name" name="last_name" value="<?php echo htmlspecialchars($user['last_name']); ?>" required>
+        </div>
+        <div class="form-group">
+            <label for="birthdate">Birthdate:</label>
+            <input type="date" class="form-control" id="birthdate" name="birthdate" value="<?php echo htmlspecialchars($user['birthdate']); ?>" required>
+        </div>
+        <button type="submit" name="update_profile" class="btn btn-primary">Update Profile</button>
+    </form>
 </div>
 
 <?php include('includes/footer.php'); ?>
