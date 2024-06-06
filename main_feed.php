@@ -53,7 +53,8 @@ $posts = mysqli_query($conn, $query);
                 <p class="card-text"><?php echo htmlspecialchars($post['content']); ?></p>
                 <p class="card-text"><small class="text-muted"><?php echo $post['created_at']; ?></small></p>
                 <?php if ($post['user_id'] == $user_id): ?>
-                    <form method="POST" action="handlers/delete_post_handler.php" onsubmit="return confirm('Are you sure you want to delete this post?');">
+                    <button class="btn btn-warning" onclick="editPost('<?php echo $post['post_id']; ?>', '<?php echo htmlspecialchars($post['content']); ?>')">Edit</button>
+                    <form method="POST" action="handlers/delete_post.php" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this post?');">
                         <input type="hidden" name="post_id" value="<?php echo $post['post_id']; ?>">
                         <button type="submit" class="btn btn-danger">Delete</button>
                     </form>
@@ -63,4 +64,39 @@ $posts = mysqli_query($conn, $query);
     <?php endwhile; ?>
 </div>
 
+<!-- Edit Post Modal -->
+<div class="modal fade" id="editPostModal" tabindex="-1" role="dialog" aria-labelledby="editPostModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST" action="handlers/edit_post_handler.php">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editPostModalLabel">Edit Post</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="edit_post_id" name="post_id">
+                    <div class="form-group">
+                        <label for="edit_content">Content:</label>
+                        <textarea class="form-control" id="edit_content" name="content" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <?php include('includes/footer.php'); ?>
+
+<script>
+function editPost(postId, content) {
+    document.getElementById('edit_post_id').value = postId;
+    document.getElementById('edit_content').value = content;
+    $('#editPostModal').modal('show');
+}
+</script>
