@@ -79,6 +79,14 @@ function display_comments($comments, $post_id, $parent_id = NULL) {
     }
     return $html;
 }
+
+// Function to get the number of likes for a post
+function getLikeCount($post_id, $conn) {
+    $query = "SELECT COUNT(*) as like_count FROM likes WHERE post_id = '$post_id'";
+    $result = mysqli_query($conn, $query);
+    $row = mysqli_fetch_assoc($result);
+    return $row['like_count'];
+}
 ?>
 
 <div class="container">
@@ -107,6 +115,9 @@ function display_comments($comments, $post_id, $parent_id = NULL) {
                         <button type="submit" class="btn btn-danger">Delete</button>
                     </form>
                 <?php endif; ?>
+                <!-- Like Button -->
+                <button class="btn btn-primary btn-sm like-btn" data-post-id="<?php echo $post['post_id']; ?>">Like</button>
+                <span id="like-count-<?php echo $post['post_id']; ?>"><?php echo getLikeCount($post['post_id'], $conn); ?></span> Likes
                 
                 <!-- Comment Form -->
                 <form method="POST" action="main_feed.php" style="margin-top: 10px;">
@@ -162,4 +173,20 @@ function editPost(postId, content) {
     document.getElementById('edit_content').value = content;
     $('#editPostModal').modal('show');
 }
+
+// Like button functionality
+$(document).on('click', '.like-btn', function() {
+    var postId = $(this).data('post-id');
+    $.ajax({
+        url: 'handlers/like_post.php',
+        type: 'POST',
+        data: {post_id: postId},
+        success: function(response) {
+            response = JSON.parse(response);
+            if (response.success) {
+                $('#like-count-' + postId).text(response.like_count);
+            }
+        }
+    });
+});
 </script>
