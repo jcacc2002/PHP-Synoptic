@@ -35,8 +35,12 @@ $conversations = mysqli_query($conn, $query);
         <?php while ($conversation = mysqli_fetch_assoc($conversations)): ?>
             <li>
                 <a href="message.php?friend_id=<?php echo $conversation['friend_id']; ?>">
-                    <?php echo $conversation['friend_username']; ?>
+                    <?php echo htmlspecialchars($conversation['friend_username']); ?>
                 </a>
+                <form method="POST" action="handlers/delete_chat_handler.php" style="display:inline;">
+                    <input type="hidden" name="friend_id" value="<?php echo $conversation['friend_id']; ?>">
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this chat?');">Delete</button>
+                </form>
             </li>
         <?php endwhile; ?>
     </ul>
