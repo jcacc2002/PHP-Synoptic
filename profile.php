@@ -55,6 +55,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_profile'])) {
         </div>
         <button type="submit" name="update_profile" class="btn btn-primary">Update Profile</button>
     </form>
+    
+    <!-- Delete Profile Button -->
+    <form method="POST" action="handlers/delete_user_handler.php" onsubmit="return confirm('Are you sure you want to delete your profile? This action cannot be undone.');">
+        <input type="hidden" name="user_id" value="<?php echo $user['user_id']; ?>">
+        <button type="submit" name="delete_profile" class="btn btn-danger mt-3">Delete Profile</button>
+    </form>
 </div>
 
 <?php include('includes/footer.php'); ?>
